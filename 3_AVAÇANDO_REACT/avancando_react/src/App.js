@@ -9,6 +9,10 @@ import ShowUserName from './components/ShowUserName';
 import Fragment from './components/Fragment';
 import Container from './components/Container';
 import ExecuteFunction from './components/ExecuteFunction';
+import { useState } from 'react';
+import Message from './components/Message';
+import ChangeMessageState from './components/ChangeMessageState';
+import UserDetails from './components/UserDetails';
 
 function App() {
   const name = 'Joaquim'
@@ -22,6 +26,35 @@ function App() {
   function showMessage() {
     console.log('Evento do componente pai!')
   }
+
+  const [message, setMessage] = useState("")
+
+  const handleMessage = (msg) => {
+    setMessage(msg)
+  }
+
+  const person = [
+    {
+        id: 1,
+        nome: 'João',
+        idade: 16,
+        profissao: 'programador'
+    },
+
+    {
+        id: 1,
+        nome: 'Rodrigo',
+        idade: 22,
+        profissao: 'Caminhoneiro'
+    },
+
+    {
+        id: 1,
+        nome: 'Adão',
+        idade: 30,
+        profissao: 'Advogado'
+    },
+]
 
   return (
     <div className="App">
@@ -59,6 +92,14 @@ function App() {
       </Container>
       {/* Executar função */}
       <ExecuteFunction myFunction={showMessage} />
+      {/* state lift */}
+      <Message msg={message} />
+      <ChangeMessageState handleMessage={handleMessage} />
+      {person.map((user) => (
+        <div>
+          <UserDetails key={user.id} name={user.nome} job={user.profissao} age={user.idade}  />
+        </div>
+      ))}
     </div>
   );
 }
