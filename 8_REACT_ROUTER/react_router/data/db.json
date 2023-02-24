@@ -1,0 +1,21 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "name": "Café",
+            "price": 2.50
+        },
+
+        {
+            "id": 2,
+            "name": "Sal",
+            "price": 3
+        },
+
+        {
+            "id": 3,
+            "name": "Agua",
+            "price": 5
+        }
+    ]
+}

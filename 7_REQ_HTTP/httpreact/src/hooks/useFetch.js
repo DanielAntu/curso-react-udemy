@@ -12,17 +12,30 @@ export const useFetch = (url) => {
     // 6 - loading
     const [loading, setLoading] = useState(false)
 
-    const httpConfig = (data, method) => {
+    // 7 tratando erro
+    const [error, setError] = useState(null)
+
+    const [itemId, setitemId] = useState(null)
+
+    const httpConfig =  (data, method) => {
         if (method === 'POST') {
             setConfig({
                 method: 'POST',
                 headers: {
-                    'Content Type': 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
             })
 
             setMethod("POST")
+        } else if (method === 'DELETE') {
+            setConfig({
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'}
+            })
+
+            setMethod('DELETE')
+            setitemId(data)
         }
     }
 
@@ -31,11 +44,16 @@ export const useFetch = (url) => {
             // 6 - loading
             setLoading(true)
 
-            const res = await fetch(url)
+            try {
+                const res = await fetch(url)
 
-            const json = await res.json()
+                const json = await res.json()
 
-            setData(json)
+                setData(json)
+            } catch (error) {
+                console.log(error.message)
+                setError("Houve algum erro ao carregar os dados!")
+            }
 
             setLoading(false)
         }
@@ -54,11 +72,19 @@ export const useFetch = (url) => {
                 const json = await res.json()
     
                 setCallFetch(json)
+            } else if (method === 'DELETE') {
+                const deleteUrl = `${url}/${itemId}`
+
+                const res = await fetch(deleteUrl, config)
+
+                const json = await res.json()
+                
+                setCallFetch(json)
             }
         }
 
         httpRequest()
-    }, [config, method, url])
+    }, [config/*, method, url*/])
 
-    return { data, httpConfig, loading }
+    return { data, httpConfig, loading, error }
 }

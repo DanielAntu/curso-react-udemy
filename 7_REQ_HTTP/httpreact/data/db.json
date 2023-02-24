@@ -29,6 +29,21 @@
       "name": "cadeira",
       "price": "200",
       "id": 6
+    },
+    {
+      "name": "mouse",
+      "price": "100",
+      "id": 7
+    },
+    {
+      "name": "leite",
+      "price": "3.50",
+      "id": 8
+    },
+    {
+      "name": "agua",
+      "price": "1.50",
+      "id": 9
     }
   ]
 }

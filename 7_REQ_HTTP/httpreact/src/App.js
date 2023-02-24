@@ -11,7 +11,7 @@ function App() {
   const [products, setProducts] = useState([])
 
   // 4 - custom
-  const {data: items, httpConfig, loading} = useFetch(url)
+  const {data: items, httpConfig, loading, error} = useFetch(url)
 
   // 1 - Resgatando dados
   // useEffect(() => {
@@ -57,15 +57,20 @@ function App() {
     setPrice("")
   }
 
+  const handleDelete = async (id) => {
+    httpConfig(id, 'DELETE')
+  }
+
   return (
     <div className="App">
       <h1>Lista de Produtos</h1>
       {/* 6 - loading */}
       {loading && <p>Carregando dados...</p>}
+      {error && <p>{error}</p>}
       {!loading && (
         <ul>
         {items && items.map((product) => (
-          <li key={product.id}>{product.name} - R$: {product.price}</li>
+          <li key={product.id}>{product.name} - R$: {product.price} <button type='button' onClick={() => handleDelete(product.id)}>X</button></li>
         ))}
       </ul>
       )}
@@ -82,7 +87,8 @@ function App() {
             <input type="number" value={price} name='price' onChange={(e) => setPrice(e.target.value)}  />
           </label>
 
-          <input type="submit" value="Criar" />
+          {loading && <input type="submit" value="Aguarde" disabled />}
+          {!loading && <input type="submit" value="Criar" />}
         </form>
       </div>
     </div>
