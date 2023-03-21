@@ -13,13 +13,21 @@ const register = async (data) => {
         if (res) {
             localStorage.setItem("user", JSON.stringify(res));
         }
+
+        return res;
     } catch (error) {
         console.log(error);
     }
 };
 
+// logout an user
+const logout = () => {
+    localStorage.removeItem("user");
+};
+
 const authService = {
     register,
+    logout,
 };
 
 export default authService;
