@@ -102,18 +102,42 @@ export const like = createAsyncThunk("photo/like", async (id, thunkApi) => {
 // Add comment to a photo
 export const comment = createAsyncThunk(
     "photo/comment",
-    async (photoData, thunkApi) => {
+    async (commentData, thunkApi) => {
         const token = thunkApi.getState().auth.user.token;
 
         const data = await photoService.comment(
-            { comment: photoData.comment },
-            photoService.id,
+            { comment: commentData.comment },
+            commentData.id,
             token
         );
 
         if (data.errors) {
             return thunkApi.rejectWithValue(data.errors[0]);
         }
+
+        return data;
+    }
+);
+
+// get a photo
+export const getPhotos = createAsyncThunk(
+    "photo/getall",
+    async (_, thunkApi) => {
+        const token = thunkApi.getState().auth.user.token;
+
+        const data = await photoService.getPhotos(token);
+
+        return data;
+    }
+);
+
+// Search photo by title
+export const searchPhotos = createAsyncThunk(
+    "photo/search",
+    async (query, thunkApi) => {
+        const token = thunkApi.getState().auth.user.token;
+
+        const data = await photoService.searchPhotos(query, token);
 
         return data;
     }
@@ -245,6 +269,26 @@ export const photoSlice = createSlice({
             .addCase(comment.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
+            })
+            .addCase(getPhotos.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getPhotos.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                state.error = null;
+                state.photos = action.payload;
+            })
+            .addCase(searchPhotos.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(searchPhotos.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                state.error = null;
+                state.photos = action.payload;
             });
     },
 });
